@@ -4,3 +4,6 @@ export type toDoItem = {
   message: string;
   id: number;
 };
+
+// type for the todo list, includes max as a counter
+export type dbData = { items: toDoItem[]; max: number };

@@ -1,21 +1,44 @@
 import express from "express";
 import bodyParser from "body-parser";
-
-import { toDoItem } from "./types.js";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
+import { toDoItem, dbData } from "./types.js";
 
 const app = express();
+
+// initialization of the lowdb library
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const file = join(__dirname, "db.json");
+const defaultData: dbData = { items: [], max: 0 };
+const adapter = new JSONFile<dbData>(file);
+const db = new Low<dbData>(adapter, defaultData);
 
 // use bodyParser to use on post methods
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(join(__dirname, "public")));
 
 // configure ejs
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
+// each tiem a request is received read the database
+app.use(async (req, res, next) => {
+  await db.read();
+  next();
+});
+
 // entry point
 app.get("/", (req, res, next) => {
-  res.render("index", {});
+  const toBeDone = db.data.items.filter((value) => !value.complete);
+  const done = db.data.items.filter((value) => value.complete);
+  res.render("index", {
+    toBeDone: toBeDone,
+    done: done,
+    score: `${done.length} / ${db.data.items.length}`,
+  });
 });
 
 // middleware to handle addition of new items

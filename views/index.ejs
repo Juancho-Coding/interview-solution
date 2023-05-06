@@ -10,7 +10,47 @@
 </head>
 
 <body>
-
+    <h1 class="title"> Todo List</h1>
+    <div class="container">
+        <section class="section">
+            <h3>To Do:</h3>
+            <% for( item of toBeDone) { %>
+                <div class="item-list">
+                    <div>
+                        <input type="checkbox" name=<%=item.id %> id=<%=item.id %> autocomplete='off'
+                            <%= item.complete ? "checked" : "" %>>
+                    </div>
+                    <div class="message">
+                        <%= item.message %>
+                    </div>
+                    <button><b>X</b></button>
+                </div>
+                <% } %>
+                    <input type="text" id="newItem" name="newITem" required minlength="1" maxlength="40"
+                        placeholder=" [ new item ] " onfocus="this.value=''">
+        </section>
+        <section class=" section">
+            <h3>Done:</h3>
+            <% for( item of done) { %>
+                <div class="item-list">
+                    <div>
+                        <input type="checkbox" name=<%=item.id %> id=<%=item.id %> autocomplete='off'
+                            <%= item.complete ? "checked" : "" %>>
+                    </div>
+                    <div class="message" style="text-decoration: line-through;">
+                        <%= item.message %>
+                    </div>
+                    <button><b>X</b></button>
+                </div>
+                <% } %>
+        </section>
+        <section class="section">
+            <div>
+                <%= score %> done
+            </div>
+        </section>
+    </div>
+    </div>
 </body>
 
 </html>
