@@ -20,8 +20,19 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message: task })
                 })
+                document.getElementById("newItem").value = ""
                 location.reload()
             }
+        }
+
+        async function clickedDelete(id) {
+            // post method to delete a task
+            const response = await fetch("/delete-item", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            })
+            location.reload()
         }
     </script>
     <h1 class="title"> Todo List</h1>
@@ -37,7 +48,7 @@
                     <div class="message">
                         <%= item.message %>
                     </div>
-                    <button><b>X</b></button>
+                    <button onclick="clickedDelete('<%=item.id %>')"><b>X</b></button>
                 </div>
                 <% } %>
                     <input type="text" id="newItem" name="newItem" required minlength="1" maxlength="40"
