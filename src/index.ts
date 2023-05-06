@@ -56,7 +56,24 @@ app.post("/add-item", (req, res, next) => {
 });
 
 // middleware to handle modification of items
-app.post("/action-item", (req, res, next) => {});
+app.post("/action-item", (req, res, next) => {
+  const id = req.body.id;
+  const state = "" + req.body.state;
+  const item = db.data.items.find((value) => {
+    return value.id.toString() == id;
+  });
+  if (item) {
+    item.complete = state == "true";
+    db.write()
+      .then(() => {
+        return res.status(200).send();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  res.redirect("/");
+});
 
 // middleware to handle deletion of items
 app.post("/delete-item", (req, res, next) => {

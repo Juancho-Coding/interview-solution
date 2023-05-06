@@ -34,6 +34,17 @@
             })
             location.reload()
         }
+
+        async function checkboxAction(id) {
+            const state = document.getElementById(id).checked
+            // post method to modify a task state
+            const response = await fetch("/action-item", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: id, state: state })
+            })
+            location.reload()
+        }
     </script>
     <h1 class="title"> Todo List</h1>
     <div class="container">
@@ -43,7 +54,7 @@
                 <div class="item-list">
                     <div>
                         <input type="checkbox" name=<%=item.id %> id=<%=item.id %> autocomplete='off'
-                            <%= item.complete ? "checked" : "" %>>
+                            onclick="checkboxAction('<%=item.id %>')" <%= item.complete ? "checked" : "" %>>
                     </div>
                     <div class="message">
                         <%= item.message %>
@@ -60,7 +71,7 @@
                 <div class="item-list">
                     <div>
                         <input type="checkbox" name=<%=item.id %> id=<%=item.id %> autocomplete='off'
-                            <%= item.complete ? "checked" : "" %>>
+                            onclick="checkboxAction('<%=item.id %>')" <%= item.complete ? "checked" : "" %>>
                     </div>
                     <div class="message" style="text-decoration: line-through;">
                         <%= item.message %>
