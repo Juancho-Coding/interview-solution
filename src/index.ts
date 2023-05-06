@@ -41,8 +41,15 @@ app.get("/", (req, res, next) => {
   });
 });
 
-// middleware to handle addition of new items
-app.post("/add-item", (req, res, next) => {});
+// middleware to handle addition of new items and update of db
+app.post("/add-item", (req, res, next) => {
+  const newTask = req.body.message;
+  db.data.items.push({ complete: false, message: newTask, id: db.data.max });
+  db.data.max += 1;
+  db.write().then(() => {
+    res.status(200).send();
+  });
+});
 
 // middleware to handle modification of items
 app.post("/action-item", (req, res, next) => {});

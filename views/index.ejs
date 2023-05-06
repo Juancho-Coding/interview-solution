@@ -10,6 +10,20 @@
 </head>
 
 <body>
+    <script>
+        async function newItemChanged() {
+            const task = document.getElementById("newItem").value
+            if (event.key == 'Enter' && task.length > 0) {
+                // post method to add tasks
+                const response = await fetch("/add-item", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: task })
+                })
+                location.reload()
+            }
+        }
+    </script>
     <h1 class="title"> Todo List</h1>
     <div class="container">
         <section class="section">
@@ -26,8 +40,8 @@
                     <button><b>X</b></button>
                 </div>
                 <% } %>
-                    <input type="text" id="newItem" name="newITem" required minlength="1" maxlength="40"
-                        placeholder=" [ new item ] " onfocus="this.value=''">
+                    <input type="text" id="newItem" name="newItem" required minlength="1" maxlength="40"
+                        placeholder=" [ new item ] " onkeydown="newItemChanged()" onfocus="this.value=''">
         </section>
         <section class=" section">
             <h3>Done:</h3>
